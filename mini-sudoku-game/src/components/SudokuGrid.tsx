@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SudokuGrid.css';
 import Cell from './Cell';
 
 const SudokuGrid: React.FC = () => {
-  const grid = Array.from({ length: 6 }, () => Array(6).fill(''));
+  const [board, setBoard] = useState<string[][]>(
+    Array.from({ length: 6 }, () => Array(6).fill(''))
+  );
+
+  const handleChange = (row: number, col: number, value: string) => {
+    const newBoard = board.map((r, rowIndex) =>
+      r.map((cellValue, colIndex) =>
+        rowIndex === row && colIndex === col ? value : cellValue
+      )
+    );
+    setBoard(newBoard);
+  };
 
   return (
     <div className="grid-container">
-      {grid.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <div className="row" key={rowIndex}>
-          {row.map((_, colIndex) => {
+          {row.map((value, colIndex) => {
             const isRightBlock = (colIndex + 1) % 2 === 0;
             const isBottomBlock = (rowIndex + 1) % 3 === 0;
 
@@ -22,7 +33,12 @@ const SudokuGrid: React.FC = () => {
 
             return (
               <div key={`${rowIndex}-${colIndex}`} style={cellStyle}>
-                <Cell row={rowIndex} col={colIndex} />
+                <Cell
+                  row={rowIndex}
+                  col={colIndex}
+                  value={value}
+                  onChange={handleChange}
+                />
               </div>
             );
           })}
