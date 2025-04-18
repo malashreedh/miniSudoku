@@ -1,0 +1,15 @@
+Components for Mini Sudoku Game:
+- App: The main container for the Sudoku game.
+- Grid: Displays the 6x6 Sudoku grid.
+  - Cell: Represents each cell in the grid that the user can interact with.
+- Timer: Tracks and displays the solving time.
+- HintButton: Provides hints to the user when clicked.
+- ControlPanel: Contains controls for starting a new game and resetting the board.
+
+Component Hierarchy:
+App
+├── Grid
+│   └── Cell (multiple)
+├── Timer
+├── HintButton
+├── ControlPanel
