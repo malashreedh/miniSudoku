@@ -1,10 +1,12 @@
 .grid-container {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: fit-content;
     margin: 0 auto;
-    border: 2px solid black;
+    border: 2px solid black; /* adds outer border */
+    box-sizing: content-box; /* ensures the border doesn't break layout */
   }
+  
   
   .row {
     display: flex;
