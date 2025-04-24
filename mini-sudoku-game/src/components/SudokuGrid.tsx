@@ -2,90 +2,50 @@ import React, { useState } from 'react';
 import './SudokuGrid.css';
 import Cell from './Cell';
 import ControlPanel from './ControlPanel';
+import {
+  Board,
+  Cell as SudokuCell,
+  cloneBoard,
+  generatePuzzle,
+  isBoardSolved
+} from '../utils/sudoku';
 
 interface SudokuGridProps {
-    setIsWin: (value: boolean) => void;
-    isWin: boolean;
-  }
-  
-
-// Puzzle 1 and its solution
-const initialPuzzle1 = [
-  ['1', '', '', '', '', ''],
-  ['', '', '', '', '', '3'],
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
-  ['', '', '', '', '', ''],
-];
-
-const solution1 = [
-  ['1', '2', '3', '4', '5', '6'],
-  ['4', '5', '6', '1', '2', '3'],
-  ['2', '3', '1', '5', '6', '4'],
-  ['5', '6', '4', '2', '3', '1'],
-  ['3', '1', '2', '6', '4', '5'],
-  ['6', '4', '5', '3', '1', '2'],
-];
-
-// Puzzle 2 and its solution
-const initialPuzzle2 = [
-  ['', '', '3', '', '', '6'],
-  ['', '', '', '1', '', ''],
-  ['2', '', '', '', '', ''],
-  ['', '', '', '', '3', ''],
-  ['', '', '1', '', '', ''],
-  ['6', '', '', '', '', ''],
-];
-
-const solution2 = [
-  ['1', '2', '3', '4', '5', '6'],
-  ['4', '5', '6', '1', '2', '3'],
-  ['2', '3', '1', '5', '6', '4'],
-  ['5', '6', '4', '2', '3', '1'],
-  ['3', '1', '2', '6', '4', '5'],
-  ['6', '4', '5', '3', '1', '2'],
-];
+  setIsWin: (value: boolean) => void;
+  isWin: boolean;
+}
 
 const SudokuGrid: React.FC<SudokuGridProps> = ({ setIsWin, isWin }) => {
-    const [puzzle, setPuzzle] = useState<string[][]>(initialPuzzle1);
-    const [board, setBoard] = useState<string[][]>(initialPuzzle1);
-  const [solution, setSolution] = useState<string[][]>(solution1);
-
-  const checkForWin = (currentBoard: string[][]) => {
-    for (let row = 0; row < 6; row++) {
-      for (let col = 0; col < 6; col++) {
-        if (currentBoard[row][col] !== solution[row][col]) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
-  
+  const [initialPuzzle, setInitialPuzzle] = useState<Board>(generatePuzzle(10));
+  const [board, setBoard] = useState<Board>(cloneBoard(initialPuzzle));
 
   const handleChange = (row: number, col: number, value: string) => {
-    const newBoard = board.map((r, rowIndex) =>
-      r.map((cellValue, colIndex) =>
-        rowIndex === row && colIndex === col ? value : cellValue
-      )
-    );
+    const intValue = parseInt(value);
+    const newBoard = cloneBoard(board);
+
+    if (!isNaN(intValue)) {
+      newBoard[row][col].value = intValue;
+    } else {
+      newBoard[row][col].value = null;
+    }
+
     setBoard(newBoard);
-  
-    if (checkForWin(newBoard)) {
+
+    if (isBoardSolved(newBoard)) {
       setIsWin(true);
     }
   };
-  
+
   const handleHint = () => {
-    for (let row = 0; row < 6; row++) {
-      for (let col = 0; col < 6; col++) {
-        if (board[row][col] === '') {
-          const newBoard = [...board];
-          newBoard[row][col] = solution[row][col];
+    for (let row = 0; row < board.length; row++) {
+      for (let col = 0; col < board[row].length; col++) {
+        if (board[row][col].value === null) {
+          const newBoard = cloneBoard(board);
+          newBoard[row][col].value = generatePuzzle(1)[row][col].value;
+          newBoard[row][col].readOnly = true;
           setBoard(newBoard);
 
-          if (checkForWin(newBoard)) {
+          if (isBoardSolved(newBoard)) {
             setIsWin(true);
           }
 
@@ -95,27 +55,24 @@ const SudokuGrid: React.FC<SudokuGridProps> = ({ setIsWin, isWin }) => {
     }
   };
 
-
   const handleReset = () => {
-    setBoard(puzzle);
+    setBoard(cloneBoard(initialPuzzle));
     setIsWin(false);
-
   };
-  
-  const handleNewGame = () => {
-    setPuzzle(initialPuzzle2);      // Update the current puzzle
-    setBoard(initialPuzzle2);       // Set the board
-    setSolution(solution2);         // Set the solution
-    setIsWin(false);
 
-  };  
+  const handleNewGame = () => {
+    const newPuzzle = generatePuzzle(10);
+    setInitialPuzzle(newPuzzle);
+    setBoard(cloneBoard(newPuzzle));
+    setIsWin(false);
+  };
 
   return (
     <>
       <div className="grid-container">
         {board.map((row, rowIndex) => (
           <div className="row" key={rowIndex}>
-            {row.map((value, colIndex) => {
+            {row.map((cell: SudokuCell, colIndex: number) => {
               const isRightBlock = (colIndex + 1) % 2 === 0;
               const isBottomBlock = (rowIndex + 1) % 3 === 0;
 
@@ -131,23 +88,22 @@ const SudokuGrid: React.FC<SudokuGridProps> = ({ setIsWin, isWin }) => {
                   <Cell
                     row={rowIndex}
                     col={colIndex}
-                    value={value}
+                    value={cell.value ? cell.value.toString() : ''}
+                    isEditable={!cell.readOnly}
                     onChange={handleChange}
-                    isEditable={puzzle[rowIndex][colIndex] === ''}
-                    />
-
-
+                  />
                 </div>
               );
             })}
           </div>
         ))}
       </div>
+
       {isWin && (
-  <div style={{ fontSize: '1.4rem', marginTop: '15px', color: 'green' }}>
-    🎉 You solved the puzzle!
-  </div>
-)}
+        <div style={{ fontSize: '1.4rem', marginTop: '15px', color: 'green' }}>
+          🎉 You solved the puzzle!
+        </div>
+      )}
 
       <ControlPanel
         onHint={handleHint}
