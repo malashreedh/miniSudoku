@@ -3,7 +3,15 @@
     height: 50px;
     text-align: center;
     font-size: 1.2rem;
-    border: 1px solid #999;
+    border: none;
     outline: none;
+    box-sizing: border-box;
+  }
+  
+  .locked-cell {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #444;
+    cursor: not-allowed;
   }
   
