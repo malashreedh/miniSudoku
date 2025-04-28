@@ -1,3 +1,4 @@
+//EVERYTHING WORKING PERFECTLY!!!!
 // src/App.tsx
 import React, { useState } from 'react';
 import Timer from './components/Timer';
