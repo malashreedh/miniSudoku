@@ -1,4 +1,4 @@
-//EVERYTHING IS WORKING PERFECTLY!!!
+// src/App.tsx
 import React, { useState } from 'react';
 import Timer from './components/Timer';
 import SudokuGrid from './components/SudokuGrid';
@@ -14,7 +14,7 @@ function App() {
   const handleCloseWin = () => setIsWin(false);
 
   return (
-    <div className="App">
+    <div className="App" style={{ position: 'relative' }}>
       <h1>Mini Sudoku</h1>
 
       <Timer
@@ -28,16 +28,39 @@ function App() {
         {isPaused ? 'Resume Timer' : 'Pause Timer'}
       </button>
 
-      {/* Show the WinModal as soon as isWin === true */}
-      {isWin && <WinModal onClose={handleCloseWin} />}
-
-      {isPaused ? (
-        <div style={{ fontSize: '1.5rem', margin: '20px', color: 'gray' }}>
+      {/* 💤 Paused message positioned lower */}
+      {isPaused && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '280px', // moved down
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontSize: '2rem',
+            color: 'gray',
+            background: 'white',
+            padding: '20px 30px',
+            borderRadius: '12px',
+            boxShadow: '0 0 15px rgba(0,0,0,0.3)',
+            zIndex: 1000
+          }}
+        >
           💤 Game Paused
         </div>
-      ) : (
-        <SudokuGrid setIsWin={setIsWin} isWin={isWin} />
       )}
+
+      {/* 🌟 Blur the board if paused */}
+      <div
+        style={{
+          filter: isPaused ? 'blur(5px)' : 'none',
+          pointerEvents: isPaused ? 'none' : 'auto',
+          transition: 'filter 0.3s ease'
+        }}
+      >
+        {/* Show win modal immediately if win */}
+        {isWin && <WinModal onClose={handleCloseWin} />}
+        <SudokuGrid setIsWin={setIsWin} isWin={isWin} />
+      </div>
     </div>
   );
 }
