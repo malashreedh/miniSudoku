@@ -1,4 +1,5 @@
 // src/components/Timer.tsx
+//EVERYTHING IS WORKING PERFECTLY!!!
 import React, { useEffect, useRef } from 'react';
 
 interface TimerProps {

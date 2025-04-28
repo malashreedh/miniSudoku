@@ -1,4 +1,4 @@
-//EVERYTHING IS WORKING!!!
+//EVERYTHING IS WORKING PERFECTLY!!!
 import React, { useState } from 'react';
 import Timer from './components/Timer';
 import SudokuGrid from './components/SudokuGrid';

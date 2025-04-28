@@ -1,4 +1,4 @@
-//EVERYTHING IS WORKING!!!
+//EVERYTHING IS WORKING PERFECTLY!!!
 import React from 'react';
 interface ControlPanelProps {
   onHint: () => void;

@@ -1,4 +1,4 @@
-//EVERYTHING IS WORKING!!!
+//EVERYTHING IS WORKING PERFECTLY!!!
 export type Cell = {
     value: number | null;
     readOnly: boolean;
