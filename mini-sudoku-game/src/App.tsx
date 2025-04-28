@@ -17,10 +17,14 @@ function App() {
       >
         {isPaused ? 'Resume Timer' : 'Pause Timer'}
       </button>
-
       <SudokuGrid setIsWin={setIsWin} isWin={isWin} />
-
-
+      {isPaused ? (
+        <div style={{ fontSize: '1.5rem', margin: '20px', color: 'gray' }}>
+          💤 Game Paused
+        </div>
+      ) : (
+        <SudokuGrid setIsWin={setIsWin} isWin={isWin} />
+      )}
     </div>
   );
 }
