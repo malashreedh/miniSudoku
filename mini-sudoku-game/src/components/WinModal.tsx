@@ -9,7 +9,7 @@ const WinModal: React.FC<WinModalProps> = ({ onClose }) => (
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Congratulations! 🎉</h2>
-      <p>You solved the puzzle!</p>
+      <p>You’ve completed the puzzle!</p>
       <button onClick={onClose}>Close</button>
     </div>
   </div>

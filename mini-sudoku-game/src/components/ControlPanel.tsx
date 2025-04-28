@@ -1,5 +1,5 @@
+//EVERYTHING WORKING
 import React from 'react';
-
 interface ControlPanelProps {
   onHint: () => void;
   onReset: () => void;

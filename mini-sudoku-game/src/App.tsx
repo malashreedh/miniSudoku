@@ -15,6 +15,7 @@ function App() {
   return (
     <div className="App">
       <h1>Mini Sudoku</h1>
+
       <Timer
         isWin={isWin}
         isPaused={isPaused}
@@ -26,6 +27,7 @@ function App() {
         {isPaused ? 'Resume Timer' : 'Pause Timer'}
       </button>
 
+      {/* Show the WinModal as soon as isWin === true */}
       {isWin && <WinModal onClose={handleCloseWin} />}
 
       {isPaused ? (
